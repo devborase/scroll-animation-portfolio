@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Gallery</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, #050816, #0b1020);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            opacity: 0;
+            transform: scale(0.985);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        body.page-out {
+            opacity: 0;
+            transform: scale(1.02);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #00d2ff;
+            text-decoration: none;
+            font-weight: bold;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 16px;
+            border-radius: 999px;
+            transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .back:hover {
+            transform: translateY(-2px);
+            background: rgba(0,210,255,0.12);
+            box-shadow: 0 0 18px rgba(0, 210, 255, 0.16);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #b0b8d4;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .photo {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transform: translateY(18px);
+            opacity: 0;
+            animation: cardIn 0.6s ease forwards;
+        }
+
+        .photo img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .photo:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo .caption {
+            padding: 14px;
+            color: #b0b8d4;
+        }
+
+        @keyframes cardIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html#skills" id="backLink">← Back to Skills</a>
+        <h1 id="skillTitle">Skill Gallery</h1>
+        <p id="skillDesc">Photos and files related to this skill.</p>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <script>
+        const data = {
+            nx: {
+                title: 'Siemens NX',
+                desc: 'Gallery for Siemens NX design files and photos.',
+                images: ['SURFACE DESIGN/Screenshot 2026-04-05 232237.png', 'SURFACE DESIGN/view.prt.png', 'SURFACE DESIGN/Screenshot 2026-03-14 010046.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015744.png', 'SURFACE DESIGN/Screenshot 2026-03-20 150544.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015717.png', 'SURFACE DESIGN/Screenshot 2026-03-20 164932.png']
+            },
+            solidworks: {
+                title: 'SolidWorks',
+                desc: 'Gallery for SolidWorks design files and photos.',
+                images: ['images/solidworks/1.jpg', 'images/solidworks/2.jpg', 'images/solidworks/3.jpg']
+            },
+            catia: {
+                title: 'CATIA',
+                desc: 'Gallery for CATIA design files and photos.',
+                images: ['REMODELING_/Screenshot 2026-07-10 185052.png', 'REMODELING_/Screenshot 2026-07-10 233751.png', 'REMODELING_/Screenshot 2026-07-13 001210.png']
+            },
+            features: {
+                title: 'features',
+                desc: 'Gallery for B_Surface_features design files and photos.',
+                images: ['FEATURE_CLIP_TOWER/Screenshot 2026-07-03 175345.png','ppt/DHF.png']
+            },
+            creo: {
+                title: 'PTC Creo',
+                desc: 'Gallery for Creo design files and photos.',
+                images: ['images/creo/1.jpg', 'images/creo/2.jpg', 'images/creo/3.jpg']
+            },
+            cfd: {
+                title: 'CFD Analysis',
+                desc: 'Gallery for CFD analysis images and results.',
+                images: ['SURFACE DESIGN/Picture1.png', 'SURFACE DESIGN/Picture2.png']
+            },
+            surface: {
+                title: 'Surface Modeling',
+                desc: 'Gallery for surface modeling files and photos.',
+                images: ['SURFACE DESIGN/Screenshot 2026-05-02 024616.png', 'SURFACE DESIGN/Screenshot 2026-05-28 184628.png', 'SURFACE DESIGN/Screenshot 2026-05-29 033554.png', 'SURFACE DESIGN/Screenshot 2026-05-02 004509.png', 'SURFACE DESIGN/Screenshot 2026-05-02 022658.png']
+            },
+            tooling: {
+                title: 'Tooling Feasibility',
+                desc: 'Gallery for tooling feasibility photos and documents.',
+                images: ['images/tooling/1.jpg', 'images/tooling/2.jpg', 'images/tooling/3.jpg']
+            },
+            cavity: {
+                title: 'Core & Cavity Extraction',
+                desc: 'Gallery for core and cavity extraction files and photos.',
+                images: ['images/cavity/1.jpg', 'images/cavity/2.jpg', 'images/cavity/3.jpg']
+            },
+            gdt: {
+                title: 'GD&T',
+                desc: 'Gallery for GD&T drawings and photos.',
+                images: ['images/gdt/1.jpg', 'images/gdt/2.jpg', 'images/gdt/3.jpg']
+            },
+            assembly: {
+                title: 'Assembly Modeling',
+                desc: 'Gallery for assembly modeling files and photos.',
+                images: ['SURFACE DESIGN/Screenshot 2026-03-26 015717.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015744.png', 'SURFACE DESIGN/Screenshot 2026-04-05 232237.png']
+            }
+        };
+
+        function renderSkill() {
+            const params = new URLSearchParams(window.location.search);
+            const skill = params.get('skill');
+            const current = data[skill] || { title: 'Skill Gallery', desc: 'Photos and files related to this skill.', images: [] };
+
+            document.getElementById('skillTitle').textContent = current.title;
+            document.getElementById('skillDesc').textContent = current.desc;
+
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = current.images.map((src, i) => `
+                <div class="photo" style="animation-delay:${i * 0.08}s">
+                    <img src="${src}" alt="${current.title} ${i + 1}">
+                    <div class="caption">${current.title} photo ${i + 1}</div>
+                </div>
+            `).join('');
+        }
+
+        function goBack() {
+            document.body.classList.add('page-out');
+            setTimeout(() => window.location.href = 'index.html#skills', 280);
+        }
+
+        window.addEventListener('load', () => {
+            renderSkill();
+            requestAnimationFrame(() => document.body.classList.add('loaded'));
+
+            if (!history.state || !history.state.skillPage) {
+                history.replaceState({ skillPage: true }, '');
+            }
+        });
+
+        window.addEventListener('popstate', goBack);
+
+        document.getElementById('backLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            goBack();
+        });
+    </script>
+    <script>
+  window.onpageshow = function(event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  };
+</script>
+</body>
+</html>
