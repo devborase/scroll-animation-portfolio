@@ -50,7 +50,6 @@
         0 0 40px rgba(58,160,255,0.15);
     }
 
-    /* BMW-like accent HUD lines */
     .hud{ position:absolute; inset:0; pointer-events:none; }
     .hud::before{
       content:"";
@@ -138,7 +137,6 @@
       50%{ transform:scale(1.35); opacity:1; }
     }
 
-    /* Loading bar */
     .loading{
       position:absolute;
       top: 18px;
@@ -219,11 +217,14 @@
     const canvas = document.getElementById("product-canvas");
     const ctx = canvas.getContext("2d", { alpha: true });
 
-    // ✅ Replace these with your frame image URLs (same count/order = your animation)
+    // ✅ GitHub RAW links (CHANGE these):
+    // Put your images in your repo, for example: frames/frame_01.jpg
+    // Raw format:
+    // https://raw.githubusercontent.com/<user>/<repo>/main/frames/frame_01.jpg
     const FRAME_URLS = [
-      "https://drive.google.com/file/d/1K9Cr6LCq6sLIqNJZxTm3NTGE2jIeeCg5/view?usp=drive_link",
-      "https://drive.google.com/file/d/16eQo6g6F1v4_34fTrUHJkluZuAr7Du6t/view?usp=drive_link",
-      "https://drive.google.com/file/d/1KDT6qyIJYNgEe87rTewZX75mGm8sWxDk/view?usp=drive_link"
+      "PHOTO/FRONT.png",
+      "PHOTO/FRONTSIDE.png",
+      "PHOTO/BACK.png"
     ];
 
     const frameCount = FRAME_URLS.length;
@@ -232,65 +233,49 @@
     const state = {
       targetFrame: 0,
       currentFrame: 0,
-      velocity: 0,
-      lastFrame: 0
+      velocity: 0
     };
 
     const loadingBox = document.getElementById("loadingBox");
     const loadingPct = document.getElementById("loadingPct");
     const loadingBar = document.getElementById("loadingBar");
 
-    // Draw with cinematic camera zoom + glow + fake motion blur
     function drawFrame(progress01) {
       if (!frameCount) return;
       const i = Math.max(0, Math.min(frameCount - 1, Math.round(state.currentFrame)));
       const img = images[i];
       if (!img) return;
 
-      // progress-based camera movement
-      const cam = 1.00 + progress01 * 0.06;          // zoom
-      const shake = (state.velocity * 0.02);        // tiny BMW vibration
+      const cam = 1.00 + progress01 * 0.06;
+      const shake = (state.velocity * 0.02);
       const ox = shake * 8;
       const oy = shake * 5;
 
-      // Motion blur: draw same frame multiple times with alpha/offset based on velocity
       const blurStrength = Math.min(1, Math.abs(state.velocity) * 0.9);
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // glow
       ctx.save();
       ctx.globalCompositeOperation = "lighter";
       ctx.shadowColor = "rgba(58,160,255,0.55)";
       ctx.shadowBlur = 28 + blurStrength * 22;
       ctx.globalAlpha = 0.55;
 
-      // Fake motion trails
       for (let k = 0; k < 4; k++) {
-        const t = k / 3; // 0..1
+        const t = k / 3;
         const dx = (ox) * (t * blurStrength);
         const dy = (oy) * (t * blurStrength);
-        ctx.drawImage(
-          img,
-          dx, dy,
-          canvas.width * cam, canvas.height * cam
-        );
+        ctx.drawImage(img, dx, dy, canvas.width * cam, canvas.height * cam);
       }
       ctx.restore();
 
-      // Main crisp draw
       ctx.save();
       ctx.globalCompositeOperation = "source-over";
       ctx.shadowColor = "rgba(125,211,255,0.35)";
       ctx.shadowBlur = 10 + blurStrength * 18;
 
-      ctx.drawImage(
-        img,
-        ox, oy,
-        canvas.width * cam, canvas.height * cam
-      );
+      ctx.drawImage(img, ox, oy, canvas.width * cam, canvas.height * cam);
 
-      // Subtle scanline overlay for “premium render”
       ctx.globalCompositeOperation = "overlay";
       ctx.globalAlpha = 0.08;
       const step = 4;
@@ -299,7 +284,6 @@
         if (((y / step) | 0) % 2 === 0) ctx.fillRect(0, y, canvas.width, 1);
       }
 
-      // Vignette
       ctx.globalCompositeOperation = "multiply";
       const vg = ctx.createRadialGradient(
         canvas.width / 2, canvas.height / 2,
@@ -315,12 +299,12 @@
       ctx.restore();
     }
 
-    // Preload frames
     if (frameCount) {
       let loaded = 0;
+
       FRAME_URLS.forEach((url, i) => {
         const img = new Image();
-        img.crossOrigin = "anonymous"; // helps if server supports it
+        img.crossOrigin = "anonymous";
         img.onload = () => {
           images[i] = img;
           loaded++;
@@ -328,18 +312,16 @@
           loadingPct.textContent = pct + "%";
           loadingBar.style.width = pct + "%";
           if (loaded === frameCount) {
-            // hide loading UI
             setTimeout(() => {
               loadingBox.style.display = "none";
               document.getElementById("dynamic-text").textContent = "Scroll to preview";
             }, 250);
-            // initial draw
             state.currentFrame = 0;
             drawFrame(0);
           }
         };
         img.onerror = () => {
-          images[i] = null; // keep order
+          images[i] = null;
           loaded++;
           const pct = Math.round((loaded / frameCount) * 100);
           loadingPct.textContent = pct + "%";
@@ -348,13 +330,11 @@
         img.src = url;
       });
 
-      // Render loop for smooth interpolation
       function tick() {
-        // smooth toward target frame
         const diff = state.targetFrame - state.currentFrame;
-        state.velocity = diff; // velocity proxy for effects
+        state.velocity = diff;
+        state.currentFrame += diff * 0.18;
 
-        state.currentFrame += diff * 0.18; // smoothing factor
         const progress01 = (frameCount <= 1) ? 0 : (state.currentFrame / (frameCount - 1));
         drawFrame(Math.max(0, Math.min(1, progress01)));
 
@@ -370,13 +350,11 @@
           start: "top top",
           end: "bottom bottom",
           scrub: 0.9,
-          // Nice feel on touch/fast scroll
           onUpdate: (self) => {
             state.targetFrame = self.progress * (frameCount - 1);
           }
         }
       });
-
     } else {
       loadingBox.style.display = "none";
       document.getElementById("dynamic-text").textContent = "Add frame image URLs in FRAME_URLS[]";
