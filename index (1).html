@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMW-Style Scroll Photo Animation</title>
+  <style>
+    :root{
+      --bg0:#05070f;
+      --bg1:#0a1024;
+      --blue:#3aa0ff;
+      --blue2:#7dd3ff;
+      --text:#eaf2ff;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(58,160,255,0.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(125,211,255,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      overflow-x:hidden;
+    }
+
+    .scroll-container{ height: 420vh; position:relative; }
+
+    .canvas-container{
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    canvas{
+      width: min(1100px, 95vw);
+      height: auto;
+      max-height: 92vh;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      box-shadow:
+        0 20px 70px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(58,160,255,0.20),
+        0 0 40px rgba(58,160,255,0.15);
+    }
+
+    /* BMW-like accent HUD lines */
+    .hud{ position:absolute; inset:0; pointer-events:none; }
+    .hud::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:10%;
+      transform:translateX(-50%);
+      width:min(900px, 85vw);
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(58,160,255,0.95), transparent);
+      box-shadow: 0 0 18px rgba(58,160,255,0.6);
+      opacity:0.9;
+    }
+    .hud::after{
+      content:"";
+      position:absolute;
+      right:3%;
+      top:50%;
+      transform:translateY(-50%);
+      width:2px;
+      height:55vh;
+      background: linear-gradient(180deg, transparent, rgba(125,211,255,0.7), transparent);
+      box-shadow: 0 0 18px rgba(125,211,255,0.5);
+      opacity:0.9;
+      border-radius: 999px;
+    }
+
+    .text-overlay{
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      pointer-events:none;
+      padding: 0 16px;
+      width: min(760px, 92vw);
+    }
+    .text-overlay h1{
+      margin:0;
+      font-size: clamp(22px, 3vw, 38px);
+      letter-spacing: 0.02em;
+      font-weight: 900;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    .text-overlay .sub{
+      margin-top:10px;
+      font-size: clamp(13px, 1.6vw, 16px);
+      color: rgba(234,242,255,0.78);
+    }
+
+    .scroll-hint{
+      position:absolute;
+      bottom: 26px;
+      left:50%;
+      transform:translateX(-50%);
+      width: min(760px, 90vw);
+      display:flex;
+      justify-content:center;
+      pointer-events:none;
+      opacity:0.95;
+    }
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(58,160,255,0.22);
+      box-shadow: 0 0 30px rgba(58,160,255,0.10);
+      color: rgba(234,242,255,0.90);
+      font-weight: 700;
+      font-size: 14px;
+      backdrop-filter: blur(6px);
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius:50%;
+      background: var(--blue);
+      box-shadow: 0 0 18px rgba(58,160,255,0.9);
+      animation: pulse 1.1s infinite ease-in-out;
+    }
+    @keyframes pulse{
+      0%,100%{ transform:scale(1); opacity:0.9; }
+      50%{ transform:scale(1.35); opacity:1; }
+    }
+
+    /* Loading bar */
+    .loading{
+      position:absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(680px, 90vw);
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(58,160,255,0.18);
+      box-shadow: 0 0 30px rgba(58,160,255,0.08);
+      backdrop-filter: blur(8px);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      pointer-events:none;
+    }
+    .loading .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-weight:700;
+      color: rgba(234,242,255,0.82);
+      font-size: 13px;
+    }
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(58,160,255,0.14);
+      overflow:hidden;
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(58,160,255,0.2), rgba(58,160,255,0.9), rgba(125,211,255,0.9));
+      box-shadow: 0 0 18px rgba(58,160,255,0.5);
+      border-radius: 999px;
+      transition: width 0.12s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-container">
+    <div class="canvas-container">
+      <canvas id="product-canvas" width="1920" height="1080"></canvas>
+
+      <div class="hud"></div>
+
+      <div class="text-overlay">
+        <h1 id="dynamic-text">Scroll to preview</h1>
+        <div class="sub">BMW-style blue finish • cinematic frame sync</div>
+      </div>
+
+      <div class="scroll-hint">
+        <div class="pill"><span class="dot"></span> Keep scrolling</div>
+      </div>
+
+      <div class="loading" id="loadingBox">
+        <div class="row">
+          <span>Loading frames…</span>
+          <span id="loadingPct">0%</span>
+        </div>
+        <div class="bar"><i id="loadingBar"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    const canvas = document.getElementById("product-canvas");
+    const ctx = canvas.getContext("2d", { alpha: true });
+
+    // ✅ Replace these with your frame image URLs (same count/order = your animation)
+    const FRAME_URLS = [
+      "https://drive.google.com/file/d/1K9Cr6LCq6sLIqNJZxTm3NTGE2jIeeCg5/view?usp=drive_link",
+      "https://drive.google.com/file/d/16eQo6g6F1v4_34fTrUHJkluZuAr7Du6t/view?usp=drive_link",
+      "https://drive.google.com/file/d/1KDT6qyIJYNgEe87rTewZX75mGm8sWxDk/view?usp=drive_link"
+    ];
+
+    const frameCount = FRAME_URLS.length;
+    const images = new Array(frameCount);
+
+    const state = {
+      targetFrame: 0,
+      currentFrame: 0,
+      velocity: 0,
+      lastFrame: 0
+    };
+
+    const loadingBox = document.getElementById("loadingBox");
+    const loadingPct = document.getElementById("loadingPct");
+    const loadingBar = document.getElementById("loadingBar");
+
+    // Draw with cinematic camera zoom + glow + fake motion blur
+    function drawFrame(progress01) {
+      if (!frameCount) return;
+      const i = Math.max(0, Math.min(frameCount - 1, Math.round(state.currentFrame)));
+      const img = images[i];
+      if (!img) return;
+
+      // progress-based camera movement
+      const cam = 1.00 + progress01 * 0.06;          // zoom
+      const shake = (state.velocity * 0.02);        // tiny BMW vibration
+      const ox = shake * 8;
+      const oy = shake * 5;
+
+      // Motion blur: draw same frame multiple times with alpha/offset based on velocity
+      const blurStrength = Math.min(1, Math.abs(state.velocity) * 0.9);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // glow
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.shadowColor = "rgba(58,160,255,0.55)";
+      ctx.shadowBlur = 28 + blurStrength * 22;
+      ctx.globalAlpha = 0.55;
+
+      // Fake motion trails
+      for (let k = 0; k < 4; k++) {
+        const t = k / 3; // 0..1
+        const dx = (ox) * (t * blurStrength);
+        const dy = (oy) * (t * blurStrength);
+        ctx.drawImage(
+          img,
+          dx, dy,
+          canvas.width * cam, canvas.height * cam
+        );
+      }
+      ctx.restore();
+
+      // Main crisp draw
+      ctx.save();
+      ctx.globalCompositeOperation = "source-over";
+      ctx.shadowColor = "rgba(125,211,255,0.35)";
+      ctx.shadowBlur = 10 + blurStrength * 18;
+
+      ctx.drawImage(
+        img,
+        ox, oy,
+        canvas.width * cam, canvas.height * cam
+      );
+
+      // Subtle scanline overlay for “premium render”
+      ctx.globalCompositeOperation = "overlay";
+      ctx.globalAlpha = 0.08;
+      const step = 4;
+      ctx.fillStyle = "rgba(120, 200, 255, 1)";
+      for (let y = 0; y < canvas.height; y += step) {
+        if (((y / step) | 0) % 2 === 0) ctx.fillRect(0, y, canvas.width, 1);
+      }
+
+      // Vignette
+      ctx.globalCompositeOperation = "multiply";
+      const vg = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2,
+        canvas.height * 0.2,
+        canvas.width / 2, canvas.height / 2,
+        canvas.height * 0.75
+      );
+      vg.addColorStop(0, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(0,0,0,0.55)");
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.restore();
+    }
+
+    // Preload frames
+    if (frameCount) {
+      let loaded = 0;
+      FRAME_URLS.forEach((url, i) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous"; // helps if server supports it
+        img.onload = () => {
+          images[i] = img;
+          loaded++;
+          const pct = Math.round((loaded / frameCount) * 100);
+          loadingPct.textContent = pct + "%";
+          loadingBar.style.width = pct + "%";
+          if (loaded === frameCount) {
+            // hide loading UI
+            setTimeout(() => {
+              loadingBox.style.display = "none";
+              document.getElementById("dynamic-text").textContent = "Scroll to preview";
+            }, 250);
+            // initial draw
+            state.currentFrame = 0;
+            drawFrame(0);
+          }
+        };
+        img.onerror = () => {
+          images[i] = null; // keep order
+          loaded++;
+          const pct = Math.round((loaded / frameCount) * 100);
+          loadingPct.textContent = pct + "%";
+          loadingBar.style.width = pct + "%";
+        };
+        img.src = url;
+      });
+
+      // Render loop for smooth interpolation
+      function tick() {
+        // smooth toward target frame
+        const diff = state.targetFrame - state.currentFrame;
+        state.velocity = diff; // velocity proxy for effects
+
+        state.currentFrame += diff * 0.18; // smoothing factor
+        const progress01 = (frameCount <= 1) ? 0 : (state.currentFrame / (frameCount - 1));
+        drawFrame(Math.max(0, Math.min(1, progress01)));
+
+        requestAnimationFrame(tick);
+      }
+      tick();
+
+      gsap.to(state, {
+        targetFrame: frameCount - 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".scroll-container",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.9,
+          // Nice feel on touch/fast scroll
+          onUpdate: (self) => {
+            state.targetFrame = self.progress * (frameCount - 1);
+          }
+        }
+      });
+
+    } else {
+      loadingBox.style.display = "none";
+      document.getElementById("dynamic-text").textContent = "Add frame image URLs in FRAME_URLS[]";
+    }
+  </script>
+</body>
+</html>
