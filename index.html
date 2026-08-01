@@ -25,7 +25,16 @@
       scroll-behavior: smooth;
     }
 
-    /* Background video layer */
+    /* Hide vertical scrollbar but keep scrolling */
+    html {
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    html::-webkit-scrollbar {
+      width: 0;
+    }
+
     .bg-video-wrap{
       position: fixed;
       inset: 0;
@@ -40,7 +49,6 @@
       filter: saturate(1.1) contrast(1.05) brightness(0.85);
       transform: scale(1.02);
     }
-    /* Dark overlay to keep text readable */
     .bg-overlay{
       position: fixed;
       inset: 0;
@@ -84,16 +92,19 @@
     }
     nav ul li a:hover { color: var(--accent); }
 
-    section {
-      min-height: 100vh;
-      padding: 120px 48px 72px;
+    /* ✅ REMOVE big gaps between sections */
+    section{
+      /* removed min-height: 100vh; */
+      padding: 88px 48px 55px;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      position: relative;
     }
+
+    #home { padding-top: 100px; }
 
     h2 {
       font-size: 38px;
@@ -248,8 +259,9 @@
     @media (max-width: 900px) { #home { grid-template-columns: 1fr; } }
     @media (max-width: 768px) {
       nav { padding: 16px 20px; flex-direction: column; gap: 12px; }
-      section { padding: 130px 20px 60px; }
+      section { padding: 110px 20px 45px; }
       h2 { font-size: 30px; }
+      #home { padding-top: 110px; }
     }
   </style>
 
@@ -475,7 +487,6 @@
   </section>
 
   <script>
-    // Video background (scroll-to-seek)
     const bgVideo = document.getElementById("bg-video");
     bgVideo.src = "https://raw.githubusercontent.com/devborase/scroll-animation-portfolio/main/BMW(MP4).mp4";
 
@@ -487,8 +498,6 @@
     bgVideo.onloadedmetadata = () => {
       window.addEventListener("wheel", (event) => {
         if (isAnimating) return;
-
-        // Optional: only seek when user scrolls vertical wheel
         if (Math.abs(event.deltaY) < 0.1) return;
 
         if (event.deltaY > 0) targetTime = Math.min(targetTime + stepAmount, bgVideo.duration);
@@ -504,7 +513,6 @@
       }, { passive: true });
     };
 
-    // Keep your clickable transitions
     document.querySelectorAll('a.project-card').forEach(link => {
       link.addEventListener('click', function (e) {
         e.preventDefault();
@@ -520,10 +528,6 @@
         setTimeout(() => window.location.href = this.href, 250);
       });
     });
-
-    window.onpageshow = function(event) {
-      if (event.persisted) window.location.reload();
-    };
   </script>
 </body>
 </html>
