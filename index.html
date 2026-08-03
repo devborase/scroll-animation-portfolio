@@ -63,7 +63,6 @@
       top: 0;
       left: 0;
       width: 100%;
-      /* reduce side padding to prevent pushing items off-screen */
       padding: 18px 28px;
       display: flex;
       justify-content: space-between;
@@ -74,7 +73,6 @@
       z-index: 100;
       border-bottom: 1px solid var(--border);
 
-      /* avoid overflow issues */
       box-sizing: border-box;
     }
 
@@ -91,8 +89,8 @@
     nav ul {
       list-style: none;
       display: flex;
-      flex-wrap: wrap;       /* allow wrapping instead of pushing off-screen */
-      gap: 18px;             /* smaller gap */
+      flex-wrap: wrap;
+      gap: 18px;
       margin: 0;
       padding: 0;
       justify-content: flex-end;
@@ -105,7 +103,7 @@
       text-decoration: none;
       font-weight: 500;
       transition: 0.25s ease;
-      white-space: nowrap; /* keep link text intact */
+      white-space: nowrap;
     }
     nav ul li a:hover { color: var(--accent); }
 
@@ -274,83 +272,122 @@
     @media (max-width: 900px) { #home { grid-template-columns: 1fr; } }
 
     @media (max-width: 768px) {
-      nav {
-        padding: 16px 16px;
-      }
-      nav ul {
-        gap: 12px;
-      }
+      nav { padding: 16px 16px; }
+      nav ul { gap: 12px; }
       section { padding: 110px 20px 45px; }
       h2 { font-size: 30px; }
       #home { padding-top: 110px; }
     }
+
     /* --- Scroll progress bar --- */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  width: 0%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  z-index: 999;
-  box-shadow: 0 0 10px var(--accent);
-}
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      z-index: 999;
+      box-shadow: 0 0 10px var(--accent);
+    }
 
-/* --- Reveal-on-scroll base state --- */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-}
+    /* --- Reveal-on-scroll base state --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+    }
 
-/* --- Project card tilt wrapper --- */
-.project-card {
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
-.model-viewer img {
-  transition: transform 0.4s ease;
-}
-.project-card:hover .model-viewer img {
-  transform: scale(1.08);
-}
+    /* --- Project card tilt wrapper --- */
+    .project-card {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    .model-viewer img {
+      transition: transform 0.4s ease;
+    }
+    .project-card:hover .model-viewer img {
+      transform: scale(1.08);
+    }
 
-/* --- Nav active link --- */
-nav ul li a.active {
-  color: var(--accent);
-}
+    /* --- Nav active link --- */
+    nav ul li a.active { color: var(--accent); }
 
-/* --- Custom cursor dot (desktop only) --- */
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
-  mix-blend-mode: difference;
-}
-.cursor-dot.grow {
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.9);
-}
-@media (max-width: 900px) {
-  .cursor-dot { display: none; }
-}
+    /* --- Custom cursor dot (desktop only) --- */
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-dot.grow { width: 40px; height: 40px; background: rgba(255,255,255,0.9); }
+    @media (max-width: 900px) { .cursor-dot { display: none; } }
 
-/* --- Hero stat pop --- */
-.stat {
-  opacity: 0;
-  transform: scale(0.9);
-}
-    
+    /* --- Hero stat pop --- */
+    .stat { opacity: 0; transform: scale(0.9); }
+
+    /* ===== Research Paper section (missing styles) ===== */
+    #research { padding-top: 92px; }
+    .paper-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px;
+    }
+    .paper-card{
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      backdrop-filter: blur(14px);
+    }
+    .paper-card h3{
+      font-size: 20px;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .paper-card .meta{
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .paper-card p{
+      color: var(--muted);
+      margin: 0 0 18px;
+      font-size: 15px;
+    }
+    .paper-actions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .paper-btn{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--accent);
+      transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+    .paper-btn:hover{
+      transform: translateY(-2px);
+      color: #ffffff;
+      background: rgba(0, 210, 255, 0.08);
+      border-color: rgba(0, 210, 255, 0.25);
+    }
   </style>
-
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
@@ -423,7 +460,6 @@ nav ul li a.active {
         <p><strong>Location:</strong> Jalgaon, Maharashtra, India</p>
       </div>
     </div>
-    
   </section>
 
   <section id="skills">
@@ -453,12 +489,12 @@ nav ul li a.active {
           <p>Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.</p>
         </div>
       </a>
-            <a class="project-card" href="project.html?name=cupholder">
+      <a class="project-card" href="project.html?name=cupholder">
         <div class="model-viewer"><img src="ppt/CUP__HOLDER.png" alt="Automotive Cup Holder Trim thumbnail"></div>
         <div class="project-info">
           <h3>Automotive Cup Holder Trim Design</h3>
           <p>Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.</p>
-           </div>
+        </div>
       </a>
       <a class="project-card" href="project.html?name=bumper">
         <div class="model-viewer"><img src="thumnail/bumper.png" alt="Automotive Front Bumper Fascia thumbnail"></div>
@@ -557,15 +593,16 @@ nav ul li a.active {
       </a>
     </div>
   </section>
-    <section id="research">
+
+  <section id="research">
     <h2>Research Paper</h2>
     <div class="paper-grid">
       <article class="paper-card reveal">
-        <h3>Title of Research Paper </h3>
-        <div class="meta">Author(s) • DEVANSHU BORASE • Year- 2026</div>
-        <p>Short abstract (2–3 lines). Add your key idea, method, and result here.</p>
+        <h3>Title of Research Paper</h3>
+        <div class="meta">Author • DEVANSHU BORASE • Year- 2026</div>
+        <p>Pneumatic Scraper Blade for CNC Laser-Bed Cleaning</p>
         <div class="paper-actions">
-          <a class="paper-btn" href="#" target="_blank" rel="noopener noreferrer">Read / PDF</a>
+          <a class="paper-btn" href="https://drive.google.com/file/d/1aHt1VHJZCTzwfykUbp53z5E3_RODX_29/view?usp=sharing" target="_blank" rel="noopener noreferrer"> PDF</a>
           <a class="paper-btn" href="https://adypsoe.in/adypjiet/assets/publications/2026/june/ADYPJIET_6_June_2026.pdf" target="_blank" rel="noopener noreferrer">DOI / Link</a>
         </div>
       </article>
@@ -591,7 +628,7 @@ nav ul li a.active {
           <span>linkedin.com/in/devanshu-borase</span>
         </a>
       </div>
-      <a class="resume-btn" href="https://drive.google.com/file/d/1lZOa3bRuiZbATiaDM5quWAaqaEkzhOwG/view?usp=drivesdk" download>Download Resume</a>
+      <a class="resume-btn" href="https://drive.google.com/file/d/1mb3pJNWRRuA0enOI-u4gorn6WUcFIQYO/view?usp=sharing" download>Download Resume</a>
     </div>
   </section>
 
@@ -637,103 +674,101 @@ nav ul li a.active {
         setTimeout(() => window.location.href = this.href, 250);
       });
     });
-    
   </script>
-  
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<script>
-  gsap.registerPlugin(ScrollTrigger);
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
 
-  /* ---- 1. Scroll progress bar ---- */
-  const progressBar = document.createElement('div');
-  progressBar.className = 'scroll-progress';
-  document.body.appendChild(progressBar);
-  gsap.to(progressBar, {
-    width: '100%',
-    ease: 'none',
-    scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3 }
-  });
+    /* ---- 1. Scroll progress bar ---- */
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    document.body.appendChild(progressBar);
+    gsap.to(progressBar, {
+      width: '100%',
+      ease: 'none',
+      scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+    });
 
-  /* ---- 2. Reveal animations for sections ---- */
-  gsap.utils.toArray('#education .edu-card, #work .project-card, #skills .skill-link').forEach((el, i) => {
-    el.classList.add('reveal');
-    gsap.to(el, {
+    /* ---- 2. Reveal animations for sections ---- */
+    gsap.utils.toArray('#education .edu-card, #work .project-card, #skills .skill-link, #research .paper-card').forEach((el, i) => {
+      el.classList.add('reveal');
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        delay: (i % 6) * 0.05,
+        scrollTrigger: { trigger: el, start: 'top 88%' }
+      });
+    });
+
+    /* ---- 3. Hero stats pop in ---- */
+    gsap.to('.stat', {
       opacity: 1,
-      y: 0,
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: (i % 6) * 0.05,
-      scrollTrigger: { trigger: el, start: 'top 88%' }
+      scale: 1,
+      duration: 0.6,
+      stagger: 0.12,
+      ease: 'back.out(1.7)',
+      delay: 0.3
     });
-  });
 
-  /* ---- 3. Hero stats pop in ---- */
-  gsap.to('.stat', {
-    opacity: 1,
-    scale: 1,
-    duration: 0.6,
-    stagger: 0.12,
-    ease: 'back.out(1.7)',
-    delay: 0.3
-  });
+    /* ---- 4. Contact box reveal ---- */
+    const contactBox = document.querySelector('.contact-box');
+    if (contactBox) {
+      contactBox.classList.add('reveal');
+      gsap.to(contactBox, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: contactBox, start: 'top 85%' }
+      });
+    }
 
-  /* ---- 4. Contact box reveal ---- */
-  const contactBox = document.querySelector('.contact-box');
-  if (contactBox) {
-    contactBox.classList.add('reveal');
-    gsap.to(contactBox, {
-      opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: contactBox, start: 'top 85%' }
+    /* ---- 5. Project card 3D tilt on hover ---- */
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateX = ((y / rect.height) - 0.5) * -10;
+        const rotateY = ((x / rect.width) - 0.5) * 10;
+        gsap.to(card, { rotateX, rotateY, duration: 0.4, ease: 'power2.out' });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
+      });
     });
-  }
 
-  /* ---- 5. Project card 3D tilt on hover ---- */
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const rotateX = ((y / rect.height) - 0.5) * -10;
-      const rotateY = ((x / rect.width) - 0.5) * 10;
-      gsap.to(card, { rotateX, rotateY, duration: 0.4, ease: 'power2.out' });
+    /* ---- 6. Nav active link highlight on scroll ---- */
+    const navLinks = document.querySelectorAll('nav ul li a');
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach(sec => {
+      ScrollTrigger.create({
+        trigger: sec,
+        start: 'top 50%',
+        end: 'bottom 50%',
+        onEnter: () => setActiveLink(sec.id),
+        onEnterBack: () => setActiveLink(sec.id)
+      });
     });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
-    });
-  });
+    function setActiveLink(id) {
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
 
-  /* ---- 6. Nav active link highlight on scroll ---- */
-  const navLinks = document.querySelectorAll('nav ul li a');
-  const sections = document.querySelectorAll('section[id]');
-  sections.forEach(sec => {
-    ScrollTrigger.create({
-      trigger: sec,
-      start: 'top 50%',
-      end: 'bottom 50%',
-      onEnter: () => setActiveLink(sec.id),
-      onEnterBack: () => setActiveLink(sec.id)
-    });
-  });
-  function setActiveLink(id) {
-    navLinks.forEach(link => {
-      link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-    });
-  }
-
-  /* ---- 7. Custom cursor dot (desktop only) ---- */
-  if (window.matchMedia('(min-width: 901px)').matches) {
-    const cursorDot = document.createElement('div');
-    cursorDot.className = 'cursor-dot';
-    document.body.appendChild(cursorDot);
-    window.addEventListener('mousemove', (e) => {
-      gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.15 });
-    });
-    document.querySelectorAll('a, .project-card').forEach(el => {
-      el.addEventListener('mouseenter', () => cursorDot.classList.add('grow'));
-      el.addEventListener('mouseleave', () => cursorDot.classList.remove('grow'));
-    });
-  }
-</script>
+    /* ---- 7. Custom cursor dot (desktop only) ---- */
+    if (window.matchMedia('(min-width: 901px)').matches) {
+      const cursorDot = document.createElement('div');
+      cursorDot.className = 'cursor-dot';
+      document.body.appendChild(cursorDot);
+      window.addEventListener('mousemove', (e) => {
+        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.15 });
+      });
+      document.querySelectorAll('a, .project-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorDot.classList.add('grow'));
+        el.addEventListener('mouseleave', () => cursorDot.classList.remove('grow'));
+      });
+    }
+  </script>
 </body>
 </html>
