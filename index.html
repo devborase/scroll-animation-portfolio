@@ -284,7 +284,73 @@
       h2 { font-size: 30px; }
       #home { padding-top: 110px; }
     }
+    /* --- Scroll progress bar --- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  z-index: 999;
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* --- Reveal-on-scroll base state --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* --- Project card tilt wrapper --- */
+.project-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.model-viewer img {
+  transition: transform 0.4s ease;
+}
+.project-card:hover .model-viewer img {
+  transform: scale(1.08);
+}
+
+/* --- Nav active link --- */
+nav ul li a.active {
+  color: var(--accent);
+}
+
+/* --- Custom cursor dot (desktop only) --- */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+  mix-blend-mode: difference;
+}
+.cursor-dot.grow {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.9);
+}
+@media (max-width: 900px) {
+  .cursor-dot { display: none; }
+}
+
+/* --- Hero stat pop --- */
+.stat {
+  opacity: 0;
+  transform: scale(0.9);
+}
+    
   </style>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
@@ -356,6 +422,7 @@
         <p><strong>Location:</strong> Jalgaon, Maharashtra, India</p>
       </div>
     </div>
+    
   </section>
 
   <section id="skills">
@@ -555,6 +622,103 @@
         setTimeout(() => window.location.href = this.href, 250);
       });
     });
+    
   </script>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---- 1. Scroll progress bar ---- */
+  const progressBar = document.createElement('div');
+  progressBar.className = 'scroll-progress';
+  document.body.appendChild(progressBar);
+  gsap.to(progressBar, {
+    width: '100%',
+    ease: 'none',
+    scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+  });
+
+  /* ---- 2. Reveal animations for sections ---- */
+  gsap.utils.toArray('#education .edu-card, #work .project-card, #skills .skill-link').forEach((el, i) => {
+    el.classList.add('reveal');
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      delay: (i % 6) * 0.05,
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+  /* ---- 3. Hero stats pop in ---- */
+  gsap.to('.stat', {
+    opacity: 1,
+    scale: 1,
+    duration: 0.6,
+    stagger: 0.12,
+    ease: 'back.out(1.7)',
+    delay: 0.3
+  });
+
+  /* ---- 4. Contact box reveal ---- */
+  const contactBox = document.querySelector('.contact-box');
+  if (contactBox) {
+    contactBox.classList.add('reveal');
+    gsap.to(contactBox, {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: contactBox, start: 'top 85%' }
+    });
+  }
+
+  /* ---- 5. Project card 3D tilt on hover ---- */
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rotateX = ((y / rect.height) - 0.5) * -10;
+      const rotateY = ((x / rect.width) - 0.5) * 10;
+      gsap.to(card, { rotateX, rotateY, duration: 0.4, ease: 'power2.out' });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
+    });
+  });
+
+  /* ---- 6. Nav active link highlight on scroll ---- */
+  const navLinks = document.querySelectorAll('nav ul li a');
+  const sections = document.querySelectorAll('section[id]');
+  sections.forEach(sec => {
+    ScrollTrigger.create({
+      trigger: sec,
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onEnter: () => setActiveLink(sec.id),
+      onEnterBack: () => setActiveLink(sec.id)
+    });
+  });
+  function setActiveLink(id) {
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+    });
+  }
+
+  /* ---- 7. Custom cursor dot (desktop only) ---- */
+  if (window.matchMedia('(min-width: 901px)').matches) {
+    const cursorDot = document.createElement('div');
+    cursorDot.className = 'cursor-dot';
+    document.body.appendChild(cursorDot);
+    window.addEventListener('mousemove', (e) => {
+      gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.15 });
+    });
+    document.querySelectorAll('a, .project-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorDot.classList.add('grow'));
+      el.addEventListener('mouseleave', () => cursorDot.classList.remove('grow'));
+    });
+  }
+</script>
 </body>
 </html>
