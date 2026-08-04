@@ -312,24 +312,6 @@
     /* --- Nav active link --- */
     nav ul li a.active { color: var(--accent); }
 
-    /* --- Custom cursor dot (desktop only) --- */
-    .cursor-dot {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
-      mix-blend-mode: difference;
-    }
-    .cursor-dot.grow { width: 40px; height: 40px; background: rgba(255,255,255,0.9); }
-    @media (max-width: 900px) { .cursor-dot { display: none; } }
-
     /* --- Hero stat pop --- */
     .stat { opacity: 0; transform: scale(0.9); }
 
@@ -750,23 +732,10 @@
         onEnterBack: () => setActiveLink(sec.id)
       });
     });
+
     function setActiveLink(id) {
       navLinks.forEach(link => {
         link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-      });
-    }
-
-    /* ---- 7. Custom cursor dot (desktop only) ---- */
-    if (window.matchMedia('(min-width: 901px)').matches) {
-      const cursorDot = document.createElement('div');
-      cursorDot.className = 'cursor-dot';
-      document.body.appendChild(cursorDot);
-      window.addEventListener('mousemove', (e) => {
-        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.15 });
-      });
-      document.querySelectorAll('a, .project-card').forEach(el => {
-        el.addEventListener('mouseenter', () => cursorDot.classList.add('grow'));
-        el.addEventListener('mouseleave', () => cursorDot.classList.remove('grow'));
       });
     }
   </script>
