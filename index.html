@@ -1,322 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Devanshu Borase | ARVO</title>
-  <style>
-    :root {
-      --text: #f7f9ff;
-      --muted: #b0b8d4;
-      --accent: #00d2ff;
-      --accent-2: #7c5cff;
-      --border: rgba(255, 255, 255, 0.08);
-      --card: rgba(15, 20, 38, 0.75);
-      --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devanshu Borase | ARVO</title>
+    <style>
+        :root {
+            --bg: #050816;
+            --bg-2: #0b1020;
+            --bg-3: #111a33;
+            --card: rgba(15, 20, 38, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f7f9ff;
+            --muted: #b0b8d4;
+            --accent: #00d2ff;
+            --accent-2: #7c5cff;
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+        }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      overflow-x: hidden;
-      font-family: Inter, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      scroll-behavior: smooth;
-    }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(0, 210, 255, 0.14), transparent 26%),
+                radial-gradient(circle at 85% 15%, rgba(124, 92, 255, 0.16), transparent 22%),
+                radial-gradient(circle at 80% 80%, rgba(0, 210, 255, 0.10), transparent 24%),
+                linear-gradient(180deg, var(--bg), var(--bg-2) 55%, var(--bg-3));
+        }
 
-    /* Hide vertical scrollbar but keep scrolling */
-    html {
-      overflow-y: auto;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    html::-webkit-scrollbar { width: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
 
-    .bg-video-wrap{
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      overflow: hidden;
-      background: #000;
-    }
-    .bg-video{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(1.1) contrast(1.05) brightness(0.85);
-      transform: scale(1.02);
-    }
-    .bg-overlay{
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: linear-gradient(180deg, rgba(5,8,22,0.65), rgba(11,16,32,0.65));
-      pointer-events: none;
-    }
+        body {
+            color: var(--text);
+            line-height: 1.7;
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
 
-    body.page-fade-out { opacity: 0; transition: opacity 0.35s ease; }
-    body { color: var(--text); line-height: 1.7; opacity: 1; transition: opacity 0.35s ease; }
+        body.page-fade-out {
+            opacity: 0;
+        }
 
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 18px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: -1;
+        }
 
-      background: rgba(5, 8, 22, 0.72);
-      backdrop-filter: blur(16px);
-      z-index: 100;
-      border-bottom: 1px solid var(--border);
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 8, 22, 0.72);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
 
-      box-sizing: border-box;
-    }
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text);
+            text-decoration: none;
+        }
 
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: var(--text);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .logo span { color: var(--accent); }
+        .logo span {
+            color: var(--accent);
+        }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      margin: 0;
-      padding: 0;
-      justify-content: flex-end;
-      align-items: center;
-      box-sizing: border-box;
-    }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 26px;
+            flex-wrap: wrap;
+        }
 
-    nav ul li a {
-      color: var(--muted);
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.25s ease;
-      white-space: nowrap;
-    }
-    nav ul li a:hover { color: var(--accent); }
+        nav ul li a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.25s ease;
+        }
 
-    section{
-      padding: 88px 48px 55px;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+        nav ul li a:hover {
+            color: var(--accent);
+        }
 
-    #home { padding-top: 100px; }
+        /* Active link (added to avoid missing class styling) */
+        nav ul li a.active {
+            color: var(--accent);
+        }
 
-    h2 {
-      font-size: 38px;
-      margin-bottom: 34px;
-      border-left: 4px solid var(--accent);
-      padding-left: 15px;
-    }
+        section {
+            min-height: 100vh;
+            padding: 120px 48px 72px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-    #home { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 40px; align-items: center; }
-    #home h1 { font-size: clamp(42px, 6vw, 70px); line-height: 1.05; margin-bottom: 14px; }
-    #home h2.subtitle {
-      font-size: 22px;
-      color: var(--accent);
-      border: none;
-      padding: 0;
-      margin-bottom: 18px;
-      font-weight: 500;
-    }
-    #home p { color: var(--muted); max-width: 680px; font-size: 17px; margin-bottom: 28px; }
+        h2 {
+            font-size: 38px;
+            margin-bottom: 34px;
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+        }
 
-    .hero-card, .project-card, .contact-box, .edu-card {
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
+        #home {
+            display: grid;
+            grid-template-columns: 1.3fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+        }
 
-    .hero-card {
-      border-radius: 22px;
-      padding: 28px;
-      position: relative;
-      overflow: hidden;
-    }
+        #home h1 {
+            font-size: clamp(42px, 6vw, 70px);
+            line-height: 1.05;
+            margin-bottom: 14px;
+        }
 
-    .hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px; }
-    .stat {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-    }
-    .stat strong { display: block; font-size: 24px; color: var(--text); margin-bottom: 6px; }
-    .stat span { color: var(--muted); font-size: 14px; }
+        #home h2.subtitle {
+            font-size: 22px;
+            color: var(--accent);
+            border: none;
+            padding: 0;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
 
-    .education-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-    .edu-card { border-radius: 18px; padding: 22px; }
-    .edu-card h3 { font-size: 22px; margin-bottom: 10px; color: var(--accent); }
-    .edu-card .year { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-    .edu-card p { color: var(--text); margin-bottom: 8px; }
+        #home p {
+            color: var(--muted);
+            max-width: 680px;
+            font-size: 17px;
+            margin-bottom: 28px;
+        }
 
-    .skills-grid { display: flex; flex-wrap: wrap; gap: 14px; }
-    .skill-link {
-      display: inline-block;
-      text-decoration: none;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      padding: 12px 20px;
-      border-radius: 999px;
-      font-size: 15px;
-      color: var(--text);
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
-    }
-    .skill-link:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 0 16px rgba(0, 210, 255, 0.14);
-    }
+        .hero-card,
+        .project-card,
+        .contact-box,
+        .edu-card {
+            background: var(--card);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
 
-    .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+        .hero-card {
+            border-radius: 22px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .project-card {
-      border-radius: 18px;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      position: relative;
-      transform: translateY(0) scale(1);
-      transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
-      z-index: 1;
-    }
-    .project-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 28px 70px rgba(0, 210, 255, 0.12);
-      border-color: rgba(124, 92, 255, 0.25);
-    }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+        }
 
-    .model-viewer {
-      width: 100%;
-      height: 220px;
-      background: linear-gradient(135deg, rgba(0, 210, 255, 0.16), rgba(124, 92, 255, 0.18));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-      text-align: center;
-      overflow: hidden;
-    }
-    .model-viewer img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .stat {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+        }
 
-    .project-info { padding: 22px; }
-    .project-info h3 { font-size: 20px; margin-bottom: 10px; color: var(--text); }
-    .project-info p { color: var(--muted); font-size: 15px; }
+        .stat strong {
+            display: block;
+            font-size: 24px;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
 
-    .contact-box {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 42px 28px;
-      border-radius: 22px;
-      text-align: center;
-    }
-    .contact-box h3 { font-size: clamp(22px, 3vw, 30px); line-height: 1.4; margin-bottom: 26px; color: var(--text); }
-    .contact-links { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 30px; }
+        .stat span {
+            color: var(--muted);
+            font-size: 14px;
+        }
 
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 600;
-      padding: 12px 18px;
-      border-radius: 999px;
-      transition: color 0.25s ease, transform 0.25s ease, background 0.25s ease;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      width: min(100%, 460px);
-    }
-    .contact-link svg { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
-    .contact-link:hover { color: #ffffff; transform: translateY(-2px); background: rgba(0, 210, 255, 0.08); }
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
 
-    .resume-btn {
-      display: inline-block;
-      background: var(--accent);
-      color: #050816;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 14px 26px;
-      border-radius: 999px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-      box-shadow: 0 10px 24px rgba(0, 210, 255, 0.18);
-    }
-    .resume-btn:hover {
-      transform: translateY(-2px);
-      background: #2fe0ff;
-      box-shadow: 0 14px 30px rgba(0, 210, 255, 0.26);
-    }
+        .edu-card {
+            border-radius: 18px;
+            padding: 22px;
+        }
 
-    @media (max-width: 900px) { #home { grid-template-columns: 1fr; } }
+        .edu-card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
 
-    @media (max-width: 768px) {
-      nav { padding: 16px 16px; }
-      nav ul { gap: 12px; }
-      section { padding: 110px 20px 45px; }
-      h2 { font-size: 30px; }
-      #home { padding-top: 110px; }
-    }
+        .edu-card .year {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
 
-    /* --- Scroll progress bar --- */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      z-index: 999;
-      box-shadow: 0 0 10px var(--accent);
-    }
+        .edu-card p {
+            color: var(--text);
+            margin-bottom: 8px;
+        }
 
-    /* --- Reveal-on-scroll base state --- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-    }
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
 
-    /* --- Project card tilt wrapper --- */
-    .project-card {
-      transform-style: preserve-3d;
-      perspective: 1000px;
-    }
-    .model-viewer img {
-      transition: transform 0.4s ease;
-    }
-    .project-card:hover .model-viewer img {
-      transform: scale(1.08);
-    }
+        .skill-link {
+            display: inline-block;
+            text-decoration: none;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-size: 15px;
+            color: var(--text);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+        }
 
-    /* --- Nav active link --- */
-    nav ul li a.active { color: var(--accent); }
+        .skill-link:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 16px rgba(0, 210, 255, 0.14);
+        }
 
-    /* --- Hero stat pop --- */
-    .stat { opacity: 0; transform: scale(0.9); }
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+        }
 
-    /* ===== Research Paper section (missing styles) ===== */
-    #research { padding-top: 92px; }
+        .project-card {
+            border-radius: 18px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            transform: translateY(0) scale(1);
+            transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 28px 70px rgba(0, 210, 255, 0.12);
+            border-color: rgba(124, 92, 255, 0.25);
+        }
+
+        .model-viewer {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.16), rgba(124, 92, 255, 0.18));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .model-viewer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .project-info {
+            padding: 22px;
+        }
+
+        .project-info h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .project-info p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .contact-box {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 42px 28px;
+            border-radius: 22px;
+            text-align: center;
+        }
+
+        .contact-box h3 {
+            font-size: clamp(22px, 3vw, 30px);
+            line-height: 1.4;
+            margin-bottom: 26px;
+            color: var(--text);
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 18px;
+            border-radius: 999px;
+            transition: color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            width: min(100%, 460px);
+        }
+
+        .contact-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .contact-link:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+            background: rgba(0, 210, 255, 0.08);
+        }
+
+        .resume-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: #050816;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 14px 26px;
+            border-radius: 999px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+            box-shadow: 0 10px 24px rgba(0, 210, 255, 0.18);
+        }
+
+        .resume-btn:hover {
+            transform: translateY(-2px);
+            background: #2fe0ff;
+            box-shadow: 0 14px 30px rgba(0, 210, 255, 0.26);
+        }
+
+        @media (max-width: 900px) {
+            #home {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            section {
+                padding: 130px 20px 60px;
+            }
+
+            h2 {
+                font-size: 30px;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Optional progress bar style */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            z-index: 9999;
+            pointer-events: none;
+        }
+        #research { padding-top: 92px; }
     .paper-grid{
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -369,375 +472,347 @@
       background: rgba(0, 210, 255, 0.08);
       border-color: rgba(0, 210, 255, 0.25);
     }
-  </style>
+    </style>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- GSAP (Fix: scripts missing causing runtime error) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
-
 <body>
-  <div class="bg-video-wrap" aria-hidden="true">
-    <video id="bg-video" class="bg-video" muted playsinline preload="auto"></video>
-  </div>
-  <div class="bg-overlay" aria-hidden="true"></div>
+    <nav>
+        <a href="#home" class="logo">ARVO<span>.</span></a>
+        <ul>
+            <li><a href="#home">Profile</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#work">Work</a></li>
+             <li><a href="#research">Research</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-  <nav>
-    <a href="#home" class="logo">ARVO<span>.</span></a>
-    <ul>
-      <li><a href="#home">Profile</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <section id="home">
-    <div>
-      <h1>Devanshu Borase</h1>
-      <h2 class="subtitle">Mechanical Engineering | CAD Designer</h2>
-      <p>
-        Mechanical Engineering graduate (Class of 2026) with hands-on academic experience in product design and advanced surface modeling.
-        Proficient in creating manufacturing-ready designs using Siemens NX, CATIA, PTC-CREO, and SolidWorks.
-        Experienced in plastic product design, including working with A, B, and C surfaces, trimming, and creating closed volumes with detailed features.
-        Passionate about high-performance automotive engineering and practical problem-solving.
-      </p>
-    </div>
-
-    <div class="hero-card">
-      <h2 style="margin-bottom: 18px;">Profile Snapshot</h2>
-      <div class="hero-stats">
-        <div class="stat"><strong>CAD</strong><span>NX, CATIA, SolidWorks, Creo</span></div>
-        <div class="stat"><strong>DFM</strong><span>Plastic design & tooling</span></div>
-        <div class="stat"><strong>CFD</strong><span>Thermal & flow optimization</span></div>
-        <div class="stat"><strong>3D</strong><span>Scans & reverse engineering</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="education">
-    <h2>Education</h2>
-    <div class="education-grid">
-      <div class="edu-card">
-        <h3>Graduation</h3>
-        <div class="year">2023 - 2026</div>
-        <p><strong>Degree:</strong> Mechanical Engineering</p>
-        <p><strong>College:</strong> Ajeenkya DY Patil School of Engineering</p>
-        <p><strong>Location:</strong> Pune, Maharashtra, India</p>
-      </div>
-
-      <div class="edu-card">
-        <h3>Diploma College</h3>
-        <div class="year">2020 - 2023</div>
-        <p><strong>Diploma:</strong> Electrical Engineering</p>
-        <p><strong>College:</strong> KCE Societies Polytechnic Jalgaon</p>
-        <p><strong>Location:</strong> Jalgaon, Maharashtra, India</p>
-      </div>
-
-      <div class="edu-card">
-        <h3>10th School</h3>
-        <div class="year">2019 - 2020</div>
-        <p><strong>School:</strong> Orion Engilsh Medium</p>
-        <p><strong>Board:</strong> State Board</p>
-        <p><strong>Location:</strong> Jalgaon, Maharashtra, India</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="skills">
-    <h2>Technical Skills</h2>
-    <div class="skills-grid">
-      <a class="skill-link" href="skill.html?skill=nx">Siemens NX</a>
-      <a class="skill-link" href="skill.html?skill=catia">CATIA</a>
-      <a class="skill-link" href="skill.html?skill=features">features</a>
-      <a class="skill-link" href="skill.html?skill=cfd">CFD Analysis</a>
-      <a class="skill-link" href="skill.html?skill=surface">Surface Modeling</a>
-      <a class="skill-link" href="skill.html?skill=assembly">Assembly Modeling</a>
-      <a class="skill-link" href="skill.html?skill=tooling">Tooling Feasibility</a>
-      <a class="skill-link" href="skill.html?skill=cavity">Core & Cavity Extraction</a>
-      <a class="skill-link" href="skill.html?skill=gdt">GD&amp;T</a>
-      <a class="skill-link" href="skill.html?skill=solidworks">SolidWorks</a>
-      <a class="skill-link" href="skill.html?skill=creo">PTC Creo</a>
-    </div>
-  </section>
-
-  <section id="work">
-    <h2>Selected Projects</h2>
-    <div class="work-grid">
-      <a class="project-card" href="project.html?name=bpillar">
-        <div class="model-viewer"><img src="ppt/B_PILLER.png" alt="Automotive B-Pillar Trim thumbnail"></div>
-        <div class="project-info">
-          <h3>Automotive B-Pillar Trim Design</h3>
-          <p>Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.</p>
+    <section id="home">
+        <div>
+            <h1>Devanshu Borase</h1>
+            <h2 class="subtitle">Mechanical Engineering | CAD Designer</h2>
+            <p>
+               Mechanical Engineering graduate (Class of 2026) with hands-on academic experience in product design and advanced surface modeling. Proficient in creating manufacturing-ready designs using Siemens NX, CATIA, PTC-CREO, and SolidWorks. Experienced in plastic product design, including working with A, B, and C surfaces, trimming, and creating closed volumes with detailed features. Passionate about high-performance automotive engineering and practical problem-solving.
+            </p>
         </div>
-      </a>
-      <a class="project-card" href="project.html?name=cupholder">
-        <div class="model-viewer"><img src="ppt/CUP__HOLDER.png" alt="Automotive Cup Holder Trim thumbnail"></div>
-        <div class="project-info">
-          <h3>Automotive Cup Holder Trim Design</h3>
-          <p>Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.</p>
+
+        <div class="hero-card">
+            <h2 style="margin-bottom: 18px;">Profile Snapshot</h2>
+            <div class="hero-stats">
+                <div class="stat"><strong>CAD</strong><span>NX, CATIA, SolidWorks, Creo</span></div>
+                <div class="stat"><strong>DFM</strong><span>Plastic design & tooling</span></div>
+                <div class="stat"><strong>CFD</strong><span>Thermal & flow optimization</span></div>
+                <div class="stat"><strong>3D</strong><span>Scans & reverse engineering</span></div>
+            </div>
         </div>
-      </a>
-      <a class="project-card" href="project.html?name=bumper">
-        <div class="model-viewer"><img src="thumnail/bumper.png" alt="Automotive Front Bumper Fascia thumbnail"></div>
-        <div class="project-info">
-          <h3>Automotive Front Bumper Fascia</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <div class="education-grid">
+            <div class="edu-card">
+                <h3>Graduation</h3>
+                <div class="year">2023 - 2026</div>
+                <p><strong>Degree:</strong> Mechanical Engineering</p>
+                <p><strong>College:</strong> Ajeenkya DY Patil School of Engineering </p>
+                <p><strong>Location:</strong> Pune, Maharashtra, India</p>
+            </div>
+
+            <div class="edu-card">
+                <h3>Diploma College</h3>
+                <div class="year">2020 - 2023</div>
+                <p><strong>Diploma:</strong> Electrical Engineering</p>
+                <p><strong>College:</strong> KCE Societies Polytechnic Jalgaon</p>
+                <p><strong>Location:</strong> Jalgaon, Maharashtra, India</p>
+            </div>
+
+            <div class="edu-card">
+                <h3>10th School</h3>
+                <div class="year">2019 - 2020</div>
+                <p><strong>School:</strong> Orion Engilsh Medium</p>
+                <p><strong>Board:</strong> State Board</p>
+                <p><strong>Location:</strong> Jalgaon, Maharashtra, India</p>
+            </div>
         </div>
-      </a>
+    </section>
 
-      <a class="project-card" href="project.html?name=air">
-        <div class="model-viewer"><img src="thumnail/airbag.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>Airbag Cover Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+            <a class="skill-link" href="skill.html?skill=nx">Siemens NX</a>
+            <a class="skill-link" href="skill.html?skill=catia">CATIA</a>
+            <a class="skill-link" href="skill.html?skill=features">features</a>
+            <a class="skill-link" href="skill.html?skill=cfd">CFD Analysis</a>
+            <a class="skill-link" href="skill.html?skill=surface">Surface Modeling</a>
+            <a class="skill-link" href="skill.html?skill=assembly">Assembly Modeling</a>
+            <a class="skill-link" href="skill.html?skill=tooling">Tooling Feasibility</a>
+            <a class="skill-link" href="skill.html?skill=cavity">Core & Cavity Extraction</a>
+            <a class="skill-link" href="skill.html?skill=gdt">GD&T</a>
+            <a class="skill-link" href="skill.html?skill=solidworks">SolidWorks</a>
+            <a class="skill-link" href="skill.html?skill=creo">PTC Creo</a>
         </div>
-      </a>
+    </section>
 
-      <a class="project-card" href="project.html?name=support">
-        <div class="model-viewer"><img src="thumnail/switch_support.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>Switch Support Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+    <section id="work">
+        <h2>Selected Projects</h2>
+        <div class="work-grid">
+            <a class="project-card" href="project.html?name=bpillar">
+                <div class="model-viewer"><img src="ppt/B_PILLER.png" alt="Automotive B-Pillar Trim thumbnail"></div>
+                <div class="project-info">
+                    <h3>Automotive B-Pillar Trim Design</h3>
+                    <p>Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.</p>
+                </div>
+            </a>
+            <a class="project-card" href="project.html?name=bumper">
+                <div class="model-viewer"><img src="thumnail/bumper.png" alt="Automotive Front Bumper Fascia thumbnail"></div>
+                <div class="project-info">
+                    <h3>Automotive Front Bumper Fascia</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=air">
+                <div class="model-viewer"><img src="thumnail/airbag.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>Airbag Cover Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=support">
+                <div class="model-viewer"><img src="thumnail/switch_support.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>Switch Support Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=sidetrim">
+                <div class="model-viewer"><img src="thumnail/side.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>Seat Recliner Side Trim Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=feature">
+                <div class="model-viewer"><img src="thumnail/feature.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>B Surface Features</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with Features.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=fbcover">
+                <div class="model-viewer"><img src="thumnail/fusebox.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>Fuse Box Cover Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=centralbezel">
+                <div class="model-viewer"><img src="thumnail/central.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>Center Bezel Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=ac">
+                <div class="model-viewer"><img src="thumnail/ac.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>AC Front Control Panel Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=autoswitch">
+                <div class="model-viewer"><img src="thumnail/switch.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>Auto Switch Design</h3>
+                    <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=automotive">
+                <div class="model-viewer"><img src="SURFACE DESIGN/Screenshot 2026-05-02 022658.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>High-Performance Automotive Modeling</h3>
+                    <p>Advanced surfacing and 3D geometric modeling for vehicle components and body panels.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=beproject">
+                <div class="model-viewer"><img src="thumnail/Screenshot 2026-04-18 161628.png" alt="Automotive modeling thumbnail"></div>
+                <div class="project-info">
+                    <h3>BE Project- Pneumatic Slag Removal Mechanism for CNC System</h3>
+                    <p>Detailed 3D CAD modeling of a pneumatic blade system, showcasing the mechanical linkages and assembly for CNC bed maintenance.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=thermal">
+                <div class="model-viewer"><img src="thumnail/rim.png" alt="Truck wheel rim thumbnail"></div>
+                <div class="project-info">
+                    <h3>Thermal Optimization of Truck Wheel Rim</h3>
+                    <p>CFD analysis and thermal optimization modeling for improved heat dissipation.</p>
+                </div>
+            </a>
         </div>
-      </a>
+    </section>
 
-      <a class="project-card" href="project.html?name=sidetrim">
-        <div class="model-viewer"><img src="thumnail/side.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>Seat Recliner Side Trim Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
+    <section id="research">
+        <h2>Research Paper</h2>
+        <div class="paper-grid">
+            <article class="paper-card reveal">
+                <h3>Title of Research Paper</h3>
+                <div class="meta">Author • DEVANSHU BORASE • Year- 2026</div>
+                <p>Pneumatic Scraper Blade for CNC Laser-Bed Cleaning</p>
+                <div class="paper-actions">
+                    <a class="paper-btn" href="https://drive.google.com/file/d/1aHt1VHJZCTzwfykUbp53z5E3_RODX_29/view?usp=sharing" target="_blank" rel="noopener noreferrer"> PDF</a>
+                    <a class="paper-btn" href="https://adypsoe.in/adypjiet/assets/publications/2026/june/ADYPJIET_6_June_2026.pdf" target="_blank" rel="noopener noreferrer">DOI / Link</a>
+                </div>
+            </article>
         </div>
-      </a>
+    </section>
 
-      <a class="project-card" href="project.html?name=feature">
-        <div class="model-viewer"><img src="thumnail/feature.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>B Surface Features</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with Features.</p>
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <div class="contact-box">
+            <h3>Let's turn your next engineering challenge into a manufacturing-ready design.</h3>
+            <div class="contact-links">
+                <a href="mailto:devborase03@gmail.com" class="contact-link">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4.5-8 5-8-5V6l8 5 8-5v2.5z"/>
+                    </svg>
+                    <span>devborase03@gmail.com</span>
+                </a>
+
+                <a href="https://www.linkedin.com/in/devanshu-borase" target="_blank" rel="noopener noreferrer" class="contact-link">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V24h-4V8zm7 0h3.84v2.19h.05c.54-1.02 1.86-2.19 3.82-2.19C19.32 8 24 9.82 24 16.26V24h-4v-6.84c0-1.63-.03-3.73-2.27-3.73-2.27 0-2.62 1.77-2.62 3.61V24h-4V8z"/>
+                    </svg>
+                    <span>linkedin.com/in/devanshu-borase</span>
+                </a>
+            </div>
+            <a class="resume-btn" href="https://drive.google.com/file/d/1lZOa3bRuiZbATiaDM5quWAaqaEkzhOwG/view?usp=drivesdk" download>Download Resume</a>
         </div>
-      </a>
+    </section>
 
-      <a class="project-card" href="project.html?name=fbcover">
-        <div class="model-viewer"><img src="thumnail/fusebox.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>Fuse Box Cover Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
-        </div>
-      </a>
-
-      <a class="project-card" href="project.html?name=centralbezel">
-        <div class="model-viewer"><img src="thumnail/central.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>Center Bezel Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
-        </div>
-      </a>
-
-      <a class="project-card" href="project.html?name=ac">
-        <div class="model-viewer"><img src="thumnail/ac.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>AC Front Control Panel Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
-        </div>
-      </a>
-
-      <a class="project-card" href="project.html?name=autoswitch">
-        <div class="model-viewer"><img src="thumnail/switch.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>Auto Switch Design</h3>
-          <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
-        </div>
-      </a>
-
-      <a class="project-card" href="project.html?name=automotive">
-        <div class="model-viewer"><img src="SURFACE DESIGN/Screenshot 2026-05-02 022658.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>High-Performance Automotive Modeling</h3>
-          <p>Advanced surfacing and 3D geometric modeling for vehicle components and body panels.</p>
-        </div>
-      </a>
-
-      <a class="project-card" href="project.html?name=beproject">
-        <div class="model-viewer"><img src="thumnail/Screenshot 2026-04-18 161628.png" alt="Automotive modeling thumbnail"></div>
-        <div class="project-info">
-          <h3>BE Project- Pneumatic Slag Removal Mechanism for CNC System</h3>
-          <p>Detailed 3D CAD modeling of a pneumatic blade system, showcasing the mechanical linkages and assembly for CNC bed maintenance.</p>
-        </div>
-      </a>
-
-      <a class="project-card" href="project.html?name=thermal">
-        <div class="model-viewer"><img src="thumnail/rim.png" alt="Truck wheel rim thumbnail"></div>
-        <div class="project-info">
-          <h3>Thermal Optimization of Truck Wheel Rim</h3>
-          <p>CFD analysis and thermal optimization modeling for improved heat dissipation.</p>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section id="research">
-    <h2>Research Paper</h2>
-    <div class="paper-grid">
-      <article class="paper-card reveal">
-        <h3>Title of Research Paper</h3>
-        <div class="meta">Author • DEVANSHU BORASE • Year- 2026</div>
-        <p>Pneumatic Scraper Blade for CNC Laser-Bed Cleaning</p>
-        <div class="paper-actions">
-          <a class="paper-btn" href="https://drive.google.com/file/d/1aHt1VHJZCTzwfykUbp53z5E3_RODX_29/view?usp=sharing" target="_blank" rel="noopener noreferrer"> PDF</a>
-          <a class="paper-btn" href="https://adypsoe.in/adypjiet/assets/publications/2026/june/ADYPJIET_6_June_2026.pdf" target="_blank" rel="noopener noreferrer">DOI / Link</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Get In Touch</h2>
-    <div class="contact-box">
-      <h3>Let's turn your next engineering challenge into a manufacturing-ready design.</h3>
-      <div class="contact-links">
-        <a href="mailto:devborase03@gmail.com" class="contact-link">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4.5-8 5-8-5V6l8 5 8-5v2.5z"/>
-          </svg>
-          <span>devborase03@gmail.com</span>
-        </a>
-
-        <a href="https://www.linkedin.com/in/devanshu-borase" target="_blank" rel="noopener noreferrer" class="contact-link">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V24h-4V8zm7 0h3.84v2.19h.05c.54-1.02 1.86-2.19 3.82-2.19C19.32 8 24 9.82 24 16.26V24h-4v-6.84c0-1.63-.03-3.73-2.27-3.73-2.27 0-2.62 1.77-2.62 3.61V24h-4V8z"/>
-          </svg>
-          <span>linkedin.com/in/devanshu-borase</span>
-        </a>
-      </div>
-      <a class="resume-btn" href="https://drive.google.com/file/d/1mb3pJNWRRuA0enOI-u4gorn6WUcFIQYO/view?usp=sharing" download>Download Resume</a>
-    </div>
-  </section>
-
-  <script>
-    const bgVideo = document.getElementById("bg-video");
-    bgVideo.src = "https://raw.githubusercontent.com/devborase/scroll-animation-portfolio/main/BMW(MP4).mp4";
-
-    const stepAmount = 1.3;
-    const transitionSpeed = 1.5;
-    let targetTime = 0;
-    let isAnimating = false;
-
-    bgVideo.onloadedmetadata = () => {
-      window.addEventListener("wheel", (event) => {
-        if (isAnimating) return;
-        if (Math.abs(event.deltaY) < 0.1) return;
-
-        if (event.deltaY > 0) targetTime = Math.min(targetTime + stepAmount, bgVideo.duration);
-        else targetTime = Math.max(targetTime - stepAmount, 0);
-
-        isAnimating = true;
-        gsap.to(bgVideo, {
-          currentTime: targetTime,
-          duration: transitionSpeed,
-          ease: "power2.inOut",
-          onComplete: () => { isAnimating = false; }
+    <script>
+        document.querySelectorAll('a.project-card').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.body.classList.add('page-fade-out');
+                setTimeout(() => window.location.href = this.href, 250);
+            });
         });
-      }, { passive: true });
-    };
 
-    document.querySelectorAll('a.project-card').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.body.classList.add('page-fade-out');
-        setTimeout(() => window.location.href = this.href, 250);
-      });
-    });
+        document.querySelectorAll('.skill-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.body.classList.add('page-fade-out');
+                setTimeout(() => window.location.href = this.href, 250);
+            });
+        });
+    </script>
 
-    document.querySelectorAll('.skill-link').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.body.classList.add('page-fade-out');
-        setTimeout(() => window.location.href = this.href, 250);
-      });
-    });
-  </script>
+    <script>
+        window.onpageshow = function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };
+    </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
+    <script>
+        // Prevent runtime error if GSAP failed to load for any reason
+        if (window.gsap && window.ScrollTrigger) {
+            gsap.registerPlugin(ScrollTrigger);
 
-    /* ---- 1. Scroll progress bar ---- */
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    document.body.appendChild(progressBar);
-    gsap.to(progressBar, {
-      width: '100%',
-      ease: 'none',
-      scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3 }
-    });
+            /* ---- 1. Scroll progress bar ---- */
+            const progressBar = document.createElement('div');
+            progressBar.className = 'scroll-progress';
+            document.body.appendChild(progressBar);
 
-    /* ---- 2. Reveal animations for sections ---- */
-    gsap.utils.toArray('#education .edu-card, #work .project-card, #skills .skill-link, #research .paper-card').forEach((el, i) => {
-      el.classList.add('reveal');
-      gsap.to(el, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        delay: (i % 6) * 0.05,
-        scrollTrigger: { trigger: el, start: 'top 88%' }
-      });
-    });
+            gsap.to(progressBar, {
+                width: '100%',
+                ease: 'none',
+                scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3 }
+            });
 
-    /* ---- 3. Hero stats pop in ---- */
-    gsap.to('.stat', {
-      opacity: 1,
-      scale: 1,
-      duration: 0.6,
-      stagger: 0.12,
-      ease: 'back.out(1.7)',
-      delay: 0.3
-    });
+            /* ---- 2. Reveal animations for sections ---- */
+            gsap.utils.toArray('#education .edu-card, #work .project-card, #skills .skill-link, #research .paper-card').forEach((el, i) => {
+                el.classList.add('reveal');
+                gsap.to(el, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power3.out',
+                    delay: (i % 6) * 0.05,
+                    scrollTrigger: { trigger: el, start: 'top 88%' }
+                });
+            });
 
-    /* ---- 4. Contact box reveal ---- */
-    const contactBox = document.querySelector('.contact-box');
-    if (contactBox) {
-      contactBox.classList.add('reveal');
-      gsap.to(contactBox, {
-        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: contactBox, start: 'top 85%' }
-      });
-    }
+            /* ---- 3. Hero stats pop in ---- */
+            gsap.to('.stat', {
+                opacity: 1,
+                scale: 1,
+                duration: 0.6,
+                stagger: 0.12,
+                ease: 'back.out(1.7)',
+                delay: 0.3
+            });
 
-    /* ---- 5. Project card 3D tilt on hover ---- */
-    document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const rotateX = ((y / rect.height) - 0.5) * -10;
-        const rotateY = ((x / rect.width) - 0.5) * 10;
-        gsap.to(card, { rotateX, rotateY, duration: 0.4, ease: 'power2.out' });
-      });
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
-      });
-    });
+            /* ---- 4. Contact box reveal ---- */
+            const contactBox = document.querySelector('.contact-box');
+            if (contactBox) {
+                contactBox.classList.add('reveal');
+                gsap.to(contactBox, {
+                    opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+                    scrollTrigger: { trigger: contactBox, start: 'top 85%' }
+                });
+            }
 
-    /* ---- 6. Nav active link highlight on scroll ---- */
-    const navLinks = document.querySelectorAll('nav ul li a');
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach(sec => {
-      ScrollTrigger.create({
-        trigger: sec,
-        start: 'top 50%',
-        end: 'bottom 50%',
-        onEnter: () => setActiveLink(sec.id),
-        onEnterBack: () => setActiveLink(sec.id)
-      });
-    });
+            /* ---- 5. Project card 3D tilt on hover ---- */
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const rotateX = ((y / rect.height) - 0.5) * -10;
+                    const rotateY = ((x / rect.width) - 0.5) * 10;
+                    gsap.to(card, { rotateX, rotateY, duration: 0.4, ease: 'power2.out' });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
+                });
+            });
 
-    function setActiveLink(id) {
-      navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-      });
-    }
-  </script>
+            /* ---- 6. Nav active link highlight on scroll ---- */
+            const navLinks = document.querySelectorAll('nav ul li a');
+            const sections = document.querySelectorAll('section[id]');
+
+            sections.forEach(sec => {
+                ScrollTrigger.create({
+                    trigger: sec,
+                    start: 'top 50%',
+                    end: 'bottom 50%',
+                    onEnter: () => setActiveLink(sec.id),
+                    onEnterBack: () => setActiveLink(sec.id)
+                });
+            });
+
+            function setActiveLink(id) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
