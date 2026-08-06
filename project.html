@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Presentation</title>
+    <style>
+        :root {
+            --bg: #050816;
+            --bg-2: #0b1020;
+            --card: rgba(15, 20, 38, 0.9);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f7f9ff;
+            --muted: #b0b8d4;
+            --accent: #00d2ff;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, var(--bg), var(--bg-2));
+            font-family: Arial, sans-serif;
+            color: var(--text);
+        }
+
+        body {
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+        }
+
+        p {
+            color: var(--muted);
+            margin-top: 0;
+        }
+
+        .viewer {
+            margin-top: 28px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        .slide-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            --mx: 50%;
+            --my: 50%;
+        }
+
+        .slide-wrap iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: #111;
+
+            transform: scale(1);
+            transform-origin: var(--mx) var(--my);
+            transition: transform 180ms ease;
+            will-change: transform;
+        }
+
+        /* Pointer zoom */
+        .slide-wrap:hover iframe {
+            transform: scale(1.10);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .slide-wrap iframe { transition: none; }
+            .slide-wrap:hover iframe { transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html#work" id="backLink">← Back to Projects</a>
+        <h1 id="projectTitle">Project Presentation</h1>
+        <p id="projectDesc">Presentation preview.</p>
+
+        <div class="viewer">
+            <div class="slide-wrap" id="slideWrap">
+                <iframe id="slideFrame" src="" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            bumper: {
+                title: 'Automotive Front Bumper Fascia',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearances.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20%20Design%20Report.pptx&embedded=true'
+            },
+           bpillar: {
+                title: 'Automotive B-Pillar Trim Design',
+                desc: 'Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/B_PILLER.pptx&embedded=true'
+            },
+             cupholder: {
+                title: 'Automotive Cup Holder Trim Design',
+                desc: 'Comprehensive plastic component design including A, B, and C surface development, detailed B-side attachment features, and environmental packaging with surrounding parts.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/scroll-animation-portfolio/ppt/CUP_HOLDER.pptx&embedded=true'
+            },
+            air: {
+                title: 'Airbag Cover Design',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Airbag%20Cover%20Design%20Report.pptx&embedded=true'
+            },
+            feature: {
+                title: 'B Surface Features Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Clip_Tower.pptx&embedded=true'
+            },
+            hhh: {
+                title: 'Fuse Box Cover Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/ppt/Fuse%20Box%20Cover%20%20Design%20Report.pptx&embedded=true'
+            },
+            centralbezel: {
+                title: 'Center Bezel Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Center%20Bezel%20Design%20Report.pptx&embedded=true'
+            },
+            ac: {
+                title: 'AC Front Control Panel Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/AC%20Front%20Control%20Panel%20Design%20Report.pptx&embedded=true'
+            },
+            autoswitch: {
+                title: 'Auto Switch Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Auto%20Switch%20Design%20Report.pptx&embedded=true'
+            },
+            central: {
+                title: 'Center Bezel Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report.pptx&embedded=true'
+            },
+            automotive: {
+                title: 'High-Performance Automotive Modeling',
+                desc: 'Advanced surfacing and 3D geometric modeling for vehicle components and body panels.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/modeling.pptx&embedded=true'
+            },
+            beproject: {
+                title: 'BE Project- Pneumatic Slag Removal Mechanism for CNC System',
+                desc: 'Detailed 3D CAD modeling of a pneumatic blade system, showcasing the mechanical linkages and assembly for CNC bed maintenance.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/beproject.pptx&embedded=true'
+            },
+            sidetrim: {
+                title: 'Seat Recliner Side Trim Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Seat%20Recliner%20Side%20Trim%20Design%20Report.pptx&embedded=true'
+            },
+            support: {
+                title: 'Switch Support Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Switch%20Support%20Design%20Report.pptx&embedded=true'
+            },
+            fbcover: {
+                title: 'Fuse Box Cover Design Report',
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Fuse%20Box%20Cover%20Design%20Report.pptx&embedded=true'
+            },
+            thermal: {
+                title: 'Thermal Optimization of Truck Wheel Rim',
+                desc: 'CFD analysis and thermal optimization modeling for improved heat dissipation.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/tim.pptx&embedded=true'
+            }
+        };
+
+        function renderProject() {
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name');
+            const current = data[name] || { title: 'Project Presentation', desc: 'Presentation preview.', slidesUrl: '' };
+
+            document.getElementById('projectTitle').textContent = current.title;
+            document.getElementById('projectDesc').textContent = current.desc;
+            document.getElementById('slideFrame').src = current.slidesUrl;
+        }
+
+        window.addEventListener('load', () => {
+            renderProject();
+            document.body.classList.add('loaded');
+        });
+
+        document.getElementById('backLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.body.classList.remove('loaded');
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 250);
+        });
+
+        // Smooth pointer zoom origin tracking
+        (function () {
+            const wrap = document.getElementById('slideWrap');
+            const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+            if (!wrap) return;
+
+            let mx = 0.5, my = 0.5, tx = 0.5, ty = 0.5;
+            let raf = 0;
+
+            function tick() {
+                mx += (tx - mx) * 0.12;
+                my += (ty - my) * 0.12;
+                wrap.style.setProperty('--mx', (mx * 100).toFixed(2) + '%');
+                wrap.style.setProperty('--my', (my * 100).toFixed(2) + '%');
+                raf = requestAnimationFrame(tick);
+            }
+
+            wrap.addEventListener('mouseenter', () => {
+                if (!raf) raf = requestAnimationFrame(tick);
+            });
+
+            wrap.addEventListener('mousemove', (e) => {
+                const r = wrap.getBoundingClientRect();
+                tx = clamp((e.clientX - r.left) / r.width, 0, 1);
+                ty = clamp((e.clientY - r.top) / r.height, 0, 1);
+            });
+
+            wrap.addEventListener('mouseleave', () => {
+                tx = 0.5; ty = 0.5;
+                if (raf) {
+                    cancelAnimationFrame(raf);
+                    raf = 0;
+                }
+                wrap.style.setProperty('--mx', '50%');
+                wrap.style.setProperty('--my', '50%');
+            });
+        })();
+    </script>
+    <script>
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          window.location.reload();
+        }
+      };
+    </script>
+</body>
+</html>
